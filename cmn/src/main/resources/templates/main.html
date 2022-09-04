@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>商品后台管理</title>
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/bootstrap-theme.min.css}" rel="stylesheet">
+    <style>
+        body{
+            background-color: #eee;
+        }
+        th, td {
+            width: 130px;
+            padding: 5px 15px;
+            text-align: center;
+        }
+        .button1{
+            padding: 8px 10px;font-size: 14px;border-radius: 4px;color: #fff;
+            background-color: #337ab7;border-color: #337ab7;
+        }
+        ul {
+      list-style: none;
+      margin-top: 100px;
+    }
+
+    .list {
+      width: 200px;
+      background-color: aqua;
+      margin-top: 10px;
+      text-align: center;
+      margin: 10px auto 0px;
+    }
+
+    .pageBtn {
+      text-align: center;
+    }
+
+    </style>
+</head>
+<body>
+    <center><h2>欢迎<label th:text="${loginUser}"/>使用本商品管理后台系统</h2></center>
+    <div style="width: 1340px;
+				padding-right: 30px;
+				padding-left: 30px;
+				margin-right: auto;
+				margin-left: auto;">
+        <a class="button1" href="/product/add">新 增</a>
+        <button class="button1">全选 / 全不选</button>
+        <button class="button1">删 除</button>
+    </div>
+<center>
+    <table class="table table-hover">
+
+        <!--<caption>产品列表</caption>-->
+        <thead>
+        <tr style="background-color: #4cae4c;">
+            <th style="width: 15px;padiing:5px 0px;"> </th>
+            <th>产品编码</th>
+            <th>产品名称</th>
+            <th>属性描述</th>
+            <th>品类</th>
+            <th>品牌</th>
+            <th>当前库存</th>
+            <th>库存更新日期</th>
+            <th>产品手册</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody th:each="product,productStat:${allProducts}">
+        <tr>
+            <td style="width: 15px;padiing:5px 0px;"><input type="checkbox"/></td>
+            <td th:text="${product.pid}"/>
+            <td th:text="${product.pname}"/>
+            <td th:text="${product.pdesc}"/>
+            <td th:text="${product.type}"/>
+            <td th:text="${product.brand}"/>
+            <td th:text="${product.available}"/>
+            <td th:text="${product.pdate}"/>
+            <td th:text="${product.manual}"/>
+            <td><button th:onclick="'update(' + ${product.pid} + ');'"> 修 改 </button>&nbsp;&nbsp;<button th:onclick="'del(' + ${product.pid} + ');'"> 删 除 </button></td>
+        </tr>
+        </tbody>
+    </table>
+</center>
+</body>
+
+<script th:src="@{/js/bootstrap.js}"></script>
+<script th:src="@{/js/jquery-2.1.4.min.js}"></script>
+<script th:inline="javascript">
+    //这里写js函数
+    //新增
+    if(sessionStorage.getItem('create')==1){
+        sessionStorage.removeItem('create')
+        this.$router.go(0)
+    }
+
+    //修改
+    function updateProduct(pid){
+
+
+    }
+
+    //删除
+    function del(pid){
+        $.ajax({
+            type:"get",
+            url : "/product/delete/"+pid,
+            dataType:JSON,
+            async:false,
+            success:function(data){
+                alert("删除成功");
+            },
+        },
+        )
+        location.reload(true);
+    };
+
+    //批量删除
+    function batchDeleteProduct(){
+
+    }
+
+
+    //全选 or 全不选
+
+
+// 分页
+  const tabelList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+  // 当前页码
+  const currentPage = 1
+  // 页面尺寸
+  const pageSize = 5
+  // 截取到相应的页码数据
+  let pageList = []
+
+  const ul = document.getElementById('tabel')
+  function List(pageData) {
+    ul.innerHTML = ""
+    // ul绑定数据
+    for (let i = 0; i < pageData.length; i++) {
+      const li = document.createElement("li")
+      li.classList.add("list")
+      li.innerText = pageData[i]
+      ul.appendChild(li)
+    }
+  }
+
+  // 刚开始显示的是第一页，所以先截取第一页的数据
+  pageList = tabelList.slice((currentPage - 1) * pageSize, currentPage * pageSize)
+  List(pageList)
+
+  // 给按钮注册点击事件
+  const btn = document.getElementsByClassName("pageBtn")
+  const li = document.querySelector("li")
+  btn[0].onclick = function (e) {
+    let newpageList = []
+    newCurrentPage = Number(e.target.innerText)
+    newpageList = tabelList.slice((newCurrentPage - 1) * pageSize, newCurrentPage * pageSize)
+    List(newpageList)
+  }
+
+
+</script>
+
+</html>

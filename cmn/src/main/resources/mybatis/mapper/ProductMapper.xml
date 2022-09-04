@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.ProductMapper">
+
+    <resultMap type="Product" id="ProductList">
+        <result property="pid"    column="pid"    jdbcType="INTEGER" javaType="int"/>
+        <result property="pname"    column="pname" jdbcType="VARCHAR"   javaType="String" />
+        <result property="pdesc"    column="pdesc"  jdbcType="VARCHAR"  javaType="String"/>
+        <result property="type"    column="type" jdbcType="VARCHAR"  javaType="String" />
+        <result property="brand"    column="brand" jdbcType="VARCHAR"  javaType="String"/>
+        <result property="available"    column="available" jdbcType="VARCHAR"  javaType="int" />
+        <result property="pdate"    column="pdate"  jdbcType="DATE"   javaType="DATE"/>
+        <result property="manual"    column="manual"  jdbcType="VARCHAR" javaType="String" />
+    </resultMap>
+
+
+    <select id="selectAllProducts" resultMap="ProductList">
+        SELECT pid, pname, pdesc, type, brand, available, pdate, manual from tb_product
+    </select>
+
+    <delete id="deleteProductById">
+        delete from tb_product where
+        <if test="pid!=0">
+            pid = #{pid}
+        </if>
+    </delete>
+    <insert id="addProduct" parameterType="com.example.demo.entity.Product" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_product(pid,pname,pdesc,type,brand,available,pdate,manual) values (#{product.pid},#{product.pname},#{product.pdesc},#{product.type},#{product.brand},#{product.available},#{product.pdate},#{product.manual})
+    </insert>
+    <delete id="deleteByEntity" parameterType="com.example.demo.entity.Product">
+        DELETE FROM student
+        <include refid="Example_Where_Clause" />
+    </delete>
+
+    <sql id="Example_Where_Clause">
+    where 1=1
+    <trim suffixOverrides=",">
+        <if test="pid != null and pid !=''">
+            and pid = #{pid}
+        </if>
+        <if test="pname != null and pname != ''">
+            and pname = #{pname}
+        </if>
+        <if test="pdesc != null ">
+            and pdesc = #{pdesc}
+        </if>
+        <if test="type != null ">
+            and type = #{type}
+        </if>
+        <if test="brand != null and brand != ''">
+            and brand = #{brand}
+        </if>
+        <if test="available != null and available != ''">
+            and available = #{available}
+        </if>
+        <if test="pdate != null">
+           and pdate = #{pdate}
+        </if>
+        <if test="manual!= null and manual != ''">
+            and manual=#{manual}
+        </if>
+    </trim>
+    </sql>
+
+
+
+
+    
+</mapper>

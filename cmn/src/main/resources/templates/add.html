@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>新增产品</title>
+</head>
+<body>
+<form action="/product/addItem" name="product" method="post">
+    商品编码<input type="text" name="pid" /> </br>
+    产品名称:<input type="text" name="pname" /></br>
+    产品属性描述: <input type="text" name="pdesc" /></br>
+    品类:<input type="text" name="type" /></br>
+    品牌: <input type="text" name="brand" /></br>
+    库存:<input id="data1" onblur="check()" type="text" name="available" placeholder="请输入数字"/></br>
+    进货日期:<input type="datetime-local" name="pdate"/></br>
+    操作手册:<input type="text" name="manual"/></br>
+    <input type="submit"  value="提交" href="/user/main"/>
+    <input type="reset" value="重置"/></br>
+</form>
+</body>
+<script>
+    function check() {
+        var reg = /[^\d]/i;
+        var data = document.getElementById("data1")
+        if (reg.test(data)) {
+
+        } else {
+            alert("输入必须是数字")
+
+        }
+    }
+</script>
+
+</html>
